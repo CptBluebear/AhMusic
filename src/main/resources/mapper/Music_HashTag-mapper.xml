@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.corodiak.ahmusic.mapper.MusicHashTagMapper">
+
+	<resultMap type="org.corodiak.ahmusic.vo.MusicHashTag" id="MusicHashTag">
+		<result column="music_idx" property="musicIdx"/>
+		<result column="hashtag_idx" property="hashTagIdx"/>
+	</resultMap>
+	
+	<insert id="insertMusicHashTag" parameterType="Map">
+		INSERT INTO MUSIC_HASHTAG(music_idx, hashtag_idx)
+		VALUES(#{musicHashTag.musicIdx}, #{musicHashTag.hashTagIdx})
+	</insert>
+
+</mapper>

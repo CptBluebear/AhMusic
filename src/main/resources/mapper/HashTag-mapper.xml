@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.corodiak.ahmusic.mapper.HashTagMapper">
+
+	<resultMap type="org.corodiak.ahmusic.vo.HashTag" id="HashTag">
+		<id column="idx" property="idx"/>
+		<result column="name" property="name"/>
+	</resultMap>
+	
+	<select id="selectTagByName" parameterType="Map" resultMap="HashTag">
+		SELECT idx, name FROM HASHTAG WHERE name = #{name}
+	</select>
+	
+	<insert id="insertHashTag" parameterType="Map" useGeneratedKeys="true" keyProperty="idx">
+		INSERT INTO HASHTAG(name)
+		VALUES(#{hashTag.name})
+	</insert>
+
+</mapper>

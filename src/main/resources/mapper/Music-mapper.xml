@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.corodiak.ahmusic.mapper.MusicMapper">
+
+	<resultMap type="org.corodiak.ahmusic.vo.Music" id="Music">
+		<id column="idx" property="idx"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="thumbnail" property="thumbnail"/>
+		<result column="type" property="type"/>
+		<result column="link" property="link"/>
+		<result column="playcount" property="playcount"/>
+		<result column="upload_date" property="uploadDate"/>
+		<result column="user_idx" property="userIdx"/>
+	</resultMap>
+	
+	<select id="selectAllMusic" resultMap="Music">
+		SELECT
+			idx, title, content, thumbnail, type, link, playcount, upload_date, user_idx
+		FROM MUSIC
+		ORDER BY idx DESC;
+	</select>
+	
+	<select id="selectMusicByIdx" parameterType="Map" resultMap="Music">
+		SELECT
+			idx, title, content, thumbnail, type, link, playcount, upload_date, user_idx
+		FROM MUSIC
+		WHERE idx = #{idx}
+	</select>
+	
+	<select id="selectMusicByUserIdx" parameterType="Map" resultMap="Music">
+		SELECT
+			idx, title, content, thumbnail, type, link, playcount, upload_date, user_idx
+		FROM MUSIC
+		WHERE user_idx = #{userIdx}
+		ORDER BY idx DESC;
+	</select>
+	
+	<select id="selectMusicByHashTag" parameterType="Map" resultMap="Music">
+		SELECT
+			MUSIC.idx, MUSIC.title, MUSIC.content, MUSIC.thumbnail, MUSIC.type, MUSIC.link, MUSIC.playcount, MUSIC.upload_date, MUSIC.user_idx
+		FROM MUSIC
+		JOIN MUSIC_HASHTAG ON MUSIC.idx = MUSIC_HASHTAG.music_idx
+		JOIN HASHTAG ON HASHTAG.idx = MUSIC_HASHTAG.hashtag_idx
+		WHERE
+			HASHTAG.name = #{hashtag}
+		ORDER BY MUSIC.idx DESC
+	</select>
+		
+	<select id="selectMusicByKeyword" parameterType="Map" resultMap="Music">
+		SELECT
+			idx, title, content, thumbnail, type, link, playcount, upload_date, user_idx
+		FROM MUSIC
+		WHERE
+			title like CONCAT('%',#{keyword},'%') OR
+			content like CONCAT('%',#{keyword},'%')
+		ORDER BY idx DESC;
+	</select>
+	
+	<!-- 따봉 누른 곡 -->
+	
+	<select id="selectMusicByThumbsUp" parameterType="Map" resultMap="Music">
+		SELECT
+			MUSIC.idx, MUSIC.title, MUSIC.content, MUSIC.thumbnail, MUSIC.type, MUSIC.link, MUSIC.playcount, MUSIC.upload_date, MUSIC.user_idx
+		FROM MUSIC
+		JOIN THUMBSUP ON MUSIC.idx = THUMBSUP.music_idx
+		JOIN USER ON USER.idx = THUMBSUP.user_idx
+		WHERE
+			USER.idx = #{userIdx}
+		ORDER BY MUSIC.idx DESC
+	</select>
+	
+	<insert id="insertMusic" parameterType="Map" useGeneratedKeys="true" keyProperty="idx">
+		INSERT INTO MUSIC(title, content, thumbnail, type, link, playcount, upload_date, user_idx)
+		VALUES(
+			#{music.title},
+			#{music.content},
+			#{music.thumbnail},
+			#{music.type},
+			#{music.link},
+			#{music.playcount},
+			#{music.uploadDate},
+			#{music.userIdx}
+		)
+	</insert>
+	
+	<update id="updatePlayCount" parameterType="Map">
+		UPDATE MUSIC SET playcount = playcount + 1 WHERE idx = #{idx}
+	</update>
+	
+
+</mapper>

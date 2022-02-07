@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.corodiak.ahmusic.mapper.UserMapper">
+	
+	<resultMap type="org.corodiak.ahmusic.vo.User" id="User">
+		<id column="idx" property="idx"/>
+		<result column="id" property="id"/>
+		<result column="pw" property="pw"/>
+		<result column="nickname" property="nickname"/>
+	</resultMap>
+	
+	<select id="selectUserById" parameterType="Map" resultMap="User">
+		SELECT
+			idx, id, pw, nickname
+		FROM USER
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="selectUserByIdx" parameterType="Map" resultMap="User">
+		SELECT
+			idx, id, pw, nickname
+		FROM USER
+		WHERE
+			idx = #{idx}
+	</select>
+
+	<select id="selectUserByNickname" parameterType="Map" resultMap="User">
+		SELECT
+			idx, id, pw, nickname
+		FROM USER
+		WHERE
+			nickname = #{nickname}
+	</select>
+	
+	<insert id="insertUser" parameterType="Map">
+		INSERT INTO USER(id, pw, nickname)
+		VALUES(#{user.id}, #{user.pw}, #{user.nickname})
+	</insert>
+	
+	<select id="selectUserNickNameByIdx" parameterType="Map" resultType="string">
+		SELECT nickname FROM USER
+		WHERE idx = #{idx}
+	</select>
+
+</mapper>
